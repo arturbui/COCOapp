@@ -38,7 +38,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                     onPressed: () => Navigator.pop(context),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(20),
@@ -70,32 +73,33 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                     children: [
                       // Media content
                       // Inside your Stack children:
-widget.isVideo
-    ? Container(
-        color: Colors.black,
-        child: const Center(
-          child: Icon(
-            Icons.play_circle_outline,
-            color: Colors.white,
-            size: 80,
-          ),
-        ),
-      )
-    : (widget.filePath == 'dummy_path_for_now' || !File(widget.filePath).existsSync())
-        ? Container(
-            color: const Color(0xFF1A1A1A),
-            child: const Center(
-              child: Text(
-                "Image Preview Placeholder",
-                style: TextStyle(color: Colors.white54),
-              ),
-            ),
-          )
-        : Image.file(
-            File(widget.filePath),
-            fit: BoxFit.cover,
-          ),
-                      
+                      widget.isVideo
+                          ? Container(
+                              color: Colors.black,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.play_circle_outline,
+                                  color: Colors.white,
+                                  size: 80,
+                                ),
+                              ),
+                            )
+                          : (widget.filePath == 'dummy_path_for_now' ||
+                                !File(widget.filePath).existsSync())
+                          ? Container(
+                              color: const Color(0xFF1A1A1A),
+                              child: const Center(
+                                child: Text(
+                                  "Image Preview Placeholder",
+                                  style: TextStyle(color: Colors.white54),
+                                ),
+                              ),
+                            )
+                          : Image.file(
+                              File(widget.filePath),
+                              fit: BoxFit.cover,
+                            ),
+
                       // Play button overlay for video
                       if (widget.isVideo)
                         Center(
@@ -161,7 +165,7 @@ widget.isVideo
               },
             ),
           ),
-          
+
           // Progress indicator
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
@@ -221,20 +225,10 @@ widget.isVideo
             color: const Color(0xFF2A2A2A),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: Colors.white,
-            size: 24,
-          ),
+          child: Icon(icon, color: Colors.white, size: 24),
         ),
         const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            color: Colors.grey[400],
-            fontSize: 12,
-          ),
-        ),
+        Text(label, style: TextStyle(color: Colors.grey[400], fontSize: 12)),
       ],
     );
   }
