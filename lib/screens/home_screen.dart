@@ -25,51 +25,39 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 const Text(
                   'while you were away\nyour latest ad...',
-                  style: TextStyle(
-                    color: Color(0xFFC3ECCA),
-                    fontSize: 24,
-                  ),
+                  style: TextStyle(color: Color(0xFFC3ECCA), fontSize: 24),
                 ),
                 const SizedBox(height: 20),
-                
+
                 Container(
                   width: double.infinity,
                   height: 180,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Color(0xFF0D2818),
-                      Color(0xFF061705),
-                    ],
-                    stops: [0.2, 0.35],
-                  ),
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFF0D2818), Color(0xFF061705)],
+                      stops: [0.2, 0.35],
+                    ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 SizedBox(
                   height: 140,
                   child: Row(
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: _buildNewIdeasCard(),
-                      ),
+                      Expanded(flex: 3, child: _buildNewIdeasCard()),
                       const SizedBox(width: 12),
-                      Expanded(
-                        flex: 2,
-                        child: _buildTutorialsCard(),
-                      ),
+                      Expanded(flex: 2, child: _buildTutorialsCard()),
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 20),
-                
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -79,12 +67,12 @@ class HomeScreen extends StatelessWidget {
                     _buildDot(false),
                   ],
                 ),
-                
+
                 const SizedBox(height: 30),
-                
+
                 _buildNewsSection(),
-                
-                const SizedBox(height: 100), 
+
+                const SizedBox(height: 100),
               ],
             ),
           ),
@@ -95,58 +83,57 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildNewIdeasCard() {
-  return Align(
-    alignment: Alignment.topLeft, 
-    child: Container(
-      width: 190,
-      height: 136,
-      decoration: BoxDecoration(
-        color: const Color(0xFFC3ECCA),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: const Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(
-              'Boil up',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                height: 1.0,
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Container(
+        width: 190,
+        height: 136,
+        decoration: BoxDecoration(
+          color: const Color(0xFFC3ECCA),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Text(
+                'Boil up',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  height: 1.0,
+                ),
               ),
-            ),
-            SizedBox(height: 2),
-            Text(
-              'New Ideas',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                height: 1.0,
+              SizedBox(height: 2),
+              Text(
+                'New Ideas',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  height: 1.0,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   Widget _buildTutorialsCard() {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF2A2A2A),
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(
-          color: const Color(0xFF5EFF79),
-          width: 5,
-        ),
+        border: Border.all(color: const Color(0xFF5EFF79), width: 5),
         image: const DecorationImage(
-          image: NetworkImage('https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400'),
+          image: NetworkImage(
+            'https://images.unsplash.com/photo-1516321497487-e288fb19713f?w=400',
+          ),
           fit: BoxFit.cover,
           opacity: 0.25,
         ),
@@ -247,16 +234,15 @@ class HomeScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Colors.grey[800]!,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey[800]!, width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(Icons.home, true, () {}),
-          _buildNavItem(Icons.smart_display_outlined, false, () {}),
+          _buildNavItem(Icons.smart_display_outlined, false, () {
+            Navigator.pushNamed(context, '/chat');
+          }),
           _buildNavItem(Icons.add_box_outlined, false, () {
             Navigator.pushNamed(context, '/create');
           }),
@@ -276,11 +262,7 @@ class HomeScreen extends StatelessWidget {
           color: isActive ? Colors.green : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(
-          icon,
-          color: Colors.white,
-          size: 24,
-        ),
+        child: Icon(icon, color: Colors.white, size: 24),
       ),
     );
   }

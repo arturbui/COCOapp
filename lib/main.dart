@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 import 'start_screen.dart';
@@ -6,12 +7,21 @@ import 'signup_screen.dart';
 import 'onboarding_questions.dart';
 import 'recommendation_screen.dart';
 import 'onboarding_provider.dart';
+import 'screens/chat_screen.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/create_screen.dart';
 import 'screens/video_editor_screen.dart';
 
-void main() {
+Future<void> main() async {
+  // Load environment variables for Claude API (skip if file not found)
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    print(
+      'Warning: .env file not found. Claude chatbot will not work without API key.',
+    );
+  }
   runApp(const MyApp());
 }
 
@@ -43,8 +53,6 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
-
-        // 🧭 Define all routes
         initialRoute: '/',
         routes: {
           '/': (context) => const StartScreen(),
@@ -54,15 +62,13 @@ class MyApp extends StatelessWidget {
           '/onboarding/question3': (context) => const Question3Screen(),
           '/onboarding/question4': (context) => const Question4Screen(),
           '/onboarding/question5': (context) => const Question5Screen(),
-          '/onboarding/recommendation': (context) => const RecommendationScreen(),
-
-          // New routes linking to real screens
-          '/home': (context) => HomeScreen(),
+          '/onboarding/recommendation': (context) =>
+              const RecommendationScreen(),
+          '/chat': (context) => const ChatScreen(),
+          '/home': (context) => const HomeScreen(),
           '/create': (context) => CreateScreen(),
-          '/editor': (context) => VideoEditorScreen(
-                filePath: '',
-                isVideo: true,
-              ),
+          '/editor': (context) =>
+              const VideoEditorScreen(filePath: '', isVideo: true),
         },
       ),
     );
