@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BackendService {
   // Change this to your computer's IP address when testing on phone
   // For web: use localhost:3000
-  static const String baseUrl = 'http://192.168.2.33:3000';
+  static const String baseUrl = 'http://192.168.2.33:3000/api';
   
   String? _token;
 

@@ -23,31 +23,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadUserData() async {
-    final isAuth = await _backendService.isAuthenticated();
-    if (!isAuth) {
-      if (mounted) {
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-      return;
-    }
-
-    final results = await Future.wait([
-      _backendService.getUserProfile(),
-      _backendService.getUserStats(),
-      _backendService.getLatestAdPerformance(),
-    ]);
-    
+  final isAuth = await _backendService.isAuthenticated();
+  
+  if (!isAuth) {
+    // Instead of redirecting, show default data
     if (mounted) {
       setState(() {
-        if (results[0] != null) {
-          username = results[0]!['username'] ?? 'James';
-        }
-        _stats = results[1];
-        _adPerformance = results[2];
+        username = 'Guest';
         _isLoading = false;
       });
     }
+    return;
   }
+
+  // Load data as before...
+  final results = await Future.wait([
+    _backendService.getUserProfile(),
+    _backendService.getUserStats(),
+    _backendService.getLatestAdPerformance(),
+  ]);
+  
+  if (mounted) {
+    setState(() {
+      if (results[0] != null) {
+        username = results[0]!['username'] ?? 'James';
+      }
+      _stats = results[1];
+      _adPerformance = results[2];
+      _isLoading = false;
+    });
+  }
+}
 
   Future<void> _refreshData() async {
     await _loadUserData();
