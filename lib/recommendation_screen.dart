@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'onboarding_provider.dart';
 
 class RecommendationScreen extends StatelessWidget {
-  const RecommendationScreen({Key? key}) : super(key: key);
+  const RecommendationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -8,10 +8,10 @@ class VideoEditorScreen extends StatefulWidget {
   final bool isVideo;
 
   const VideoEditorScreen({
-    Key? key,
+    super.key,
     required this.filePath,
     required this.isVideo,
-  }) : super(key: key);
+  });
 
   @override
   _VideoEditorScreenState createState() => _VideoEditorScreenState();
@@ -236,7 +236,7 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: 60,
             child: Stack(
               children: [

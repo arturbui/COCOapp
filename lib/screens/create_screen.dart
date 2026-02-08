@@ -5,6 +5,8 @@ import 'video_editor_screen.dart';
 class CreateScreen extends StatelessWidget {
   final ImagePicker _picker = ImagePicker();
 
+  CreateScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

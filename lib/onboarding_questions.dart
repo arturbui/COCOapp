@@ -5,7 +5,7 @@ import 'onboarding_provider.dart';
 
 // Question 1: What feels hardest about marketing today?
 class Question1Screen extends StatelessWidget {
-  const Question1Screen({Key? key}) : super(key: key);
+  const Question1Screen({super.key});
 
   static const List<String> options = [
     "I don't know what to post",
@@ -33,7 +33,7 @@ class Question1Screen extends StatelessWidget {
 
 // Question 2: How established is your social media presence
 class Question2Screen extends StatelessWidget {
-  const Question2Screen({Key? key}) : super(key: key);
+  const Question2Screen({super.key});
 
   static const List<String> options = [
     "No accounts yet",
@@ -72,7 +72,7 @@ class Question2Screen extends StatelessWidget {
 
 // Question 3: Who are you trying to reach?
 class Question3Screen extends StatelessWidget {
-  const Question3Screen({Key? key}) : super(key: key);
+  const Question3Screen({super.key});
 
   static const List<String> options = [
     "Local customers",
@@ -100,7 +100,7 @@ class Question3Screen extends StatelessWidget {
 
 // Question 4: Where are you starting from?
 class Question4Screen extends StatelessWidget {
-  const Question4Screen({Key? key}) : super(key: key);
+  const Question4Screen({super.key});
 
   static const List<String> options = [
     "Local business",
@@ -128,7 +128,7 @@ class Question4Screen extends StatelessWidget {
 
 // Question 5: What would success look like in the next 3 months
 class Question5Screen extends StatelessWidget {
-  const Question5Screen({Key? key}) : super(key: key);
+  const Question5Screen({super.key});
 
   static const List<String> options = [
     "Get my first customers",

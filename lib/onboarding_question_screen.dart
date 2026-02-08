@@ -13,7 +13,7 @@ class OnboardingQuestionScreen extends StatefulWidget {
   final Function(List<String>)? onCheckboxChanged;
 
   const OnboardingQuestionScreen({
-    Key? key,
+    super.key,
     required this.title,
     required this.question,
     required this.options,
@@ -24,7 +24,7 @@ class OnboardingQuestionScreen extends StatefulWidget {
     this.checkboxOptions,
     this.selectedCheckboxes,
     this.onCheckboxChanged,
-  }) : super(key: key);
+  });
 
   @override
   State<OnboardingQuestionScreen> createState() => _OnboardingQuestionScreenState();
@@ -57,7 +57,7 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: widget.title.split(' ').first + ' ',
+                      text: '${widget.title.split(' ').first} ',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 28,
