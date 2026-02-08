@@ -43,7 +43,6 @@ class CreateScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: const Color(0xFF1A1A1A),
                       borderRadius: BorderRadius.circular(20),
-                      
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -66,7 +65,11 @@ class CreateScreen extends StatelessWidget {
                           title: 'Take Photo or Video',
                           onTap: () {
                             // Go directly to editor with dummy video path
-                            _navigateToEditor(context, 'dummy_video_path', true);
+                            _navigateToEditor(
+                              context,
+                              'dummy_video_path',
+                              true,
+                            );
                           },
                         ),
                         Container(
@@ -80,7 +83,11 @@ class CreateScreen extends StatelessWidget {
                           title: 'Select from Gallery',
                           onTap: () {
                             // Go directly to editor with dummy video path
-                            _navigateToEditor(context, 'dummy_gallery_path', true);
+                            _navigateToEditor(
+                              context,
+                              'dummy_gallery_path',
+                              true,
+                            );
                           },
                         ),
                       ],
@@ -103,10 +110,7 @@ class CreateScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF0A0A0A),
         borderRadius: BorderRadius.circular(30),
-        border: Border.all(
-          color: Colors.grey[800]!,
-          width: 1,
-        ),
+        border: Border.all(color: Colors.grey[800]!, width: 1),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -114,10 +118,14 @@ class CreateScreen extends StatelessWidget {
           _buildNavItem(Icons.home, false, () {
             Navigator.pop(context);
           }),
-          _buildNavItem(Icons.smart_display_outlined, false, () {}),
+          _buildNavItem(Icons.chat_bubble_outline, false, () {
+            Navigator.pushNamed(context, '/chat');
+          }),
           _buildNavItem(Icons.add_box_outlined, true, () {}),
           _buildNavItem(Icons.notifications_outlined, false, () {}),
-          _buildNavItem(Icons.person_outline, false, () {}),
+          _buildNavItem(Icons.person_outline, false, () {
+            Navigator.pushNamed(context, '/profile');
+          }),
         ],
       ),
     );
@@ -132,68 +140,59 @@ class CreateScreen extends StatelessWidget {
           color: isActive ? Colors.green : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Icon(
-          icon,
-          color: Colors.white,
-          size: 24,
+        child: Icon(icon, color: Colors.white, size: 24),
+      ),
+    );
+  }
+
+  Widget _buildActionButton(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: Color(0xFFC3ECCA), size: 22),
+            ),
+            Expanded(
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 40),
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      color: Color(0xFFC3ECCA),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildActionButton(BuildContext context, {
-  required IconData icon,
-  required String title,
-  required VoidCallback onTap,
-}) {
-  return InkWell(
-    onTap: onTap,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.green,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              icon,
-              color: Color(0xFFC3ECCA),
-              size: 22,
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 40), 
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Color(0xFFC3ECCA),
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
   void _navigateToEditor(BuildContext context, String filePath, bool isVideo) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => VideoEditorScreen(
-          filePath: filePath,
-          isVideo: isVideo,
-        ),
+        builder: (context) =>
+            VideoEditorScreen(filePath: filePath, isVideo: isVideo),
       ),
     );
   }

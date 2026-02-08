@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final BackendService _backendService = BackendService();
-  
+
   String username = 'James';
   bool _isLoading = true;
   Map<String, dynamic>? _stats;
@@ -23,37 +23,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadUserData() async {
-  final isAuth = await _backendService.isAuthenticated();
-  
-  if (!isAuth) {
-    // Instead of redirecting, show default data
+    final isAuth = await _backendService.isAuthenticated();
+
+    if (!isAuth) {
+      // Instead of redirecting, show default data
+      if (mounted) {
+        setState(() {
+          username = 'Guest';
+          _isLoading = false;
+        });
+      }
+      return;
+    }
+
+    // Load data as before...
+    final results = await Future.wait([
+      _backendService.getUserProfile(),
+      _backendService.getUserStats(),
+      _backendService.getLatestAdPerformance(),
+    ]);
+
     if (mounted) {
       setState(() {
-        username = 'Guest';
+        if (results[0] != null) {
+          username = results[0]!['username'] ?? 'James';
+        }
+        _stats = results[1];
+        _adPerformance = results[2];
         _isLoading = false;
       });
     }
-    return;
   }
-
-  // Load data as before...
-  final results = await Future.wait([
-    _backendService.getUserProfile(),
-    _backendService.getUserStats(),
-    _backendService.getLatestAdPerformance(),
-  ]);
-  
-  if (mounted) {
-    setState(() {
-      if (results[0] != null) {
-        username = results[0]!['username'] ?? 'James';
-      }
-      _stats = results[1];
-      _adPerformance = results[2];
-      _isLoading = false;
-    });
-  }
-}
 
   Future<void> _refreshData() async {
     await _loadUserData();
@@ -66,9 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: _isLoading
             ? const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xFF94FFA6),
-                ),
+                child: CircularProgressIndicator(color: Color(0xFF94FFA6)),
               )
             : RefreshIndicator(
                 onRefresh: _refreshData,
@@ -194,10 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
           : const Center(
               child: Text(
                 'No ad data available',
-                style: TextStyle(
-                  color: Color(0xFF94FFA6),
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Color(0xFF94FFA6), fontSize: 14),
               ),
             ),
     );
@@ -217,10 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: 4),
         Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFFC3ECCA),
-            fontSize: 12,
-          ),
+          style: const TextStyle(color: Color(0xFFC3ECCA), fontSize: 12),
         ),
       ],
     );
@@ -317,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildNewsSection() {
     final totalViews = _stats?['total_views']?.toString() ?? '1.2k';
     final newFollowers = _stats?['new_followers']?.toString() ?? '300';
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -387,14 +379,16 @@ class _HomeScreenState extends State<HomeScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(Icons.home, true, () {}),
-          _buildNavItem(Icons.smart_display_outlined, false, () {
+          _buildNavItem(Icons.chat_bubble_outline, false, () {
             Navigator.pushNamed(context, '/chat');
           }),
           _buildNavItem(Icons.add_box_outlined, false, () {
             Navigator.pushNamed(context, '/create');
           }),
           _buildNavItem(Icons.notifications_outlined, false, () {}),
-          _buildNavItem(Icons.person_outline, false, () {}),
+          _buildNavItem(Icons.person_outline, false, () {
+            Navigator.pushNamed(context, '/profile');
+          }),
         ],
       ),
     );

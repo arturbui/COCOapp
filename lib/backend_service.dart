@@ -5,10 +5,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BackendService {
   // Change this to your computer's IP address when testing on phone
   // For web: use localhost:3000
-  static const String baseUrl = 'http://192.168.2.33:3000/api';
-  
-  String? _token;
+  // For android: use http://192.168.2.33:3000/api
+  static const String baseUrl = 'http://localhost:3000/api';
 
+  String? _token;
 
   Future<void> _saveToken(String token) async {
     _token = token;
@@ -18,7 +18,7 @@ class BackendService {
 
   Future<String?> _getToken() async {
     if (_token != null) return _token;
-    
+
     final prefs = await SharedPreferences.getInstance();
     _token = prefs.getString('auth_token');
     return _token;
@@ -30,7 +30,11 @@ class BackendService {
     await prefs.remove('auth_token');
   }
 
-  Future<Map<String, dynamic>?> signUp(String username, String email, String password) async {
+  Future<Map<String, dynamic>?> signUp(
+    String username,
+    String email,
+    String password,
+  ) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/signup'),
@@ -62,10 +66,7 @@ class BackendService {
       final response = await http.post(
         Uri.parse('$baseUrl/auth/login'),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
+        body: jsonEncode({'email': email, 'password': password}),
       );
 
       if (response.statusCode == 200) {
@@ -116,9 +117,7 @@ class BackendService {
 
       final response = await http.get(
         Uri.parse('$baseUrl/user/profile'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -143,9 +142,7 @@ class BackendService {
 
       final response = await http.get(
         Uri.parse('$baseUrl/recommendations'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
+        headers: {'Authorization': 'Bearer $token'},
       );
 
       if (response.statusCode == 200) {
@@ -161,7 +158,6 @@ class BackendService {
     }
   }
 
- 
   Future<Map<String, dynamic>?> getUserStats() async {
     try {
       final token = await _getToken();
@@ -170,12 +166,12 @@ class BackendService {
         return null;
       }
 
-      final response = await http.get(
-        Uri.parse('$baseUrl/user/stats'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/user/stats'),
+            headers: {'Authorization': 'Bearer $token'},
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -198,12 +194,12 @@ class BackendService {
         return null;
       }
 
-      final response = await http.get(
-        Uri.parse('$baseUrl/ads/latest'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/ads/latest'),
+            headers: {'Authorization': 'Bearer $token'},
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body);
@@ -226,12 +222,12 @@ class BackendService {
         return null;
       }
 
-      final response = await http.get(
-        Uri.parse('$baseUrl/ads'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/ads'),
+            headers: {'Authorization': 'Bearer $token'},
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -255,12 +251,12 @@ class BackendService {
         return null;
       }
 
-      final response = await http.get(
-        Uri.parse('$baseUrl/news'),
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response = await http
+          .get(
+            Uri.parse('$baseUrl/news'),
+            headers: {'Authorization': 'Bearer $token'},
+          )
+          .timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);

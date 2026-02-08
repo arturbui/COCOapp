@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 
 import 'start_screen.dart';
 import 'signup_screen.dart';
+import 'login_screen.dart';
 import 'onboarding_questions.dart';
 import 'recommendation_screen.dart';
 import 'onboarding_provider.dart';
 import 'screens/chat_screen.dart';
+import 'profile_screen.dart';
 
 import 'screens/home_screen.dart';
 import 'screens/create_screen.dart';
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const StartScreen(),
           '/signup': (context) => const SignUpScreen(),
+          '/login': (context) => const LoginScreen(),
           '/onboarding/question1': (context) => const Question1Screen(),
           '/onboarding/question2': (context) => const Question2Screen(),
           '/onboarding/question3': (context) => const Question3Screen(),
@@ -66,6 +69,7 @@ class MyApp extends StatelessWidget {
               const RecommendationScreen(),
           '/chat': (context) => const ChatScreen(),
           '/home': (context) => const HomeScreen(),
+          '/profile': (context) => const ProfileScreen(),
           '/create': (context) => CreateScreen(),
           '/editor': (context) =>
               const VideoEditorScreen(filePath: '', isVideo: true),

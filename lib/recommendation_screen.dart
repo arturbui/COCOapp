@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'onboarding_provider.dart';
 import 'backend_service.dart';
 
 class RecommendationScreen extends StatelessWidget {
   const RecommendationScreen({super.key});
+
+  // Open Meta Business URL
+  Future<void> _openMetaBusinessLink() async {
+    final Uri url = Uri.parse('https://business.facebook.com/overview');
+
+    if (!await launchUrl(
+      url,
+      mode: LaunchMode.externalApplication, // opens in browser
+    )) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,9 +100,7 @@ class RecommendationScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // TODO: Open Meta business account link
-                  },
+                  onPressed: _openMetaBusinessLink, // <- opens Meta
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFC3ECCA),
                     foregroundColor: Colors.black,

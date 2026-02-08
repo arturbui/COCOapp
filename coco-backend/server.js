@@ -245,3 +245,12 @@ app.listen(PORT, () => {
   console.log(`   GET  /api/user/profile`);
   console.log(`   GET  /api/recommendations`);
 });
+// get users
+app.get('/api/users', (req, res) => {
+  res.json(users.map(u => ({
+    id: u.id,
+    username: u.username,
+    email: u.email,
+    createdAt: u.createdAt
+  })));
+});
