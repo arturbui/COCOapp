@@ -5,18 +5,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class BackendService {
   // Change this to your computer's IP address when testing on phone
   // For web: use localhost:3000
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://192.168.2.33:3000';
   
   String? _token;
 
-  // Save token locally
+
   Future<void> _saveToken(String token) async {
     _token = token;
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('auth_token', token);
   }
 
-  // Load token
   Future<String?> _getToken() async {
     if (_token != null) return _token;
     
@@ -25,14 +24,12 @@ class BackendService {
     return _token;
   }
 
-  // Clear token (logout)
   Future<void> clearToken() async {
     _token = null;
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('auth_token');
   }
 
-  // Sign up
   Future<Map<String, dynamic>?> signUp(String username, String email, String password) async {
     try {
       final response = await http.post(
@@ -85,7 +82,6 @@ class BackendService {
     }
   }
 
-  // Save onboarding data
   Future<bool> saveOnboardingData(Map<String, dynamic> data) async {
     try {
       final token = await _getToken();
@@ -110,7 +106,6 @@ class BackendService {
     }
   }
 
-  // Get user profile
   Future<Map<String, dynamic>?> getUserProfile() async {
     try {
       final token = await _getToken();
@@ -138,7 +133,6 @@ class BackendService {
     }
   }
 
-  // Get recommendations
   Future<List<String>?> getRecommendations() async {
     try {
       final token = await _getToken();
@@ -165,5 +159,125 @@ class BackendService {
       print('Error getting recommendations: $e');
       return null;
     }
+  }
+
+ 
+  Future<Map<String, dynamic>?> getUserStats() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        print('No auth token');
+        return null;
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/user/stats'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        print('Failed to get stats: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting user stats: $e');
+      return null;
+    }
+  }
+
+  // Get latest ad performance
+  Future<Map<String, dynamic>?> getLatestAdPerformance() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        print('No auth token');
+        return null;
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/ads/latest'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        print('Failed to get ad performance: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting ad performance: $e');
+      return null;
+    }
+  }
+
+  // Get user's ads list
+  Future<List<Map<String, dynamic>>?> getUserAds() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        print('No auth token');
+        return null;
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/ads'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<Map<String, dynamic>>.from(data['ads']);
+      } else {
+        print('Failed to get ads: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting ads: $e');
+      return null;
+    }
+  }
+
+  // Get news/updates
+  Future<List<Map<String, dynamic>>?> getNews() async {
+    try {
+      final token = await _getToken();
+      if (token == null) {
+        print('No auth token');
+        return null;
+      }
+
+      final response = await http.get(
+        Uri.parse('$baseUrl/news'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      ).timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return List<Map<String, dynamic>>.from(data['news']);
+      } else {
+        print('Failed to get news: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      print('Error getting news: $e');
+      return null;
+    }
+  }
+
+  // Check if user is authenticated
+  Future<bool> isAuthenticated() async {
+    final token = await _getToken();
+    return token != null;
   }
 }
