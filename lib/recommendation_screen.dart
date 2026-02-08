@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'onboarding_provider.dart';
+import 'backend_service.dart';
 
 class RecommendationScreen extends StatelessWidget {
   const RecommendationScreen({super.key});
@@ -124,12 +125,30 @@ class RecommendationScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home',
-                      (route) => false,
-                    );
+                  onPressed: () async {
+                    final backendService = BackendService();
+
+                    // Save onboarding data to backend
+                    final saved = await backendService.saveOnboardingData({
+                      'marketingChallenge': provider.data.marketingChallenge,
+                      'socialMediaPresence': provider.data.socialMediaPresence,
+                      'selectedPlatforms': provider.data.selectedPlatforms,
+                      'targetAudience': provider.data.targetAudience,
+                      'businessType': provider.data.businessType,
+                      'successGoal': provider.data.successGoal,
+                    });
+
+                    if (saved) {
+                      Navigator.pushNamedAndRemoveUntil(
+                        context,
+                        '/home',
+                        (route) => false,
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to save data')),
+                      );
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF94FFA6),
