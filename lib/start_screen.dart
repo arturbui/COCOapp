@@ -6,7 +6,7 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0F0F0F), // Match home screen
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -23,7 +23,7 @@ class StartScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: const Color(0xFF00FF00),
+                        color: const Color(0xFF94FFA6), // Match home green
                         width: 3,
                       ),
                     ),
@@ -36,7 +36,7 @@ class StartScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color(0xFF00FF00),
+                              color: const Color(0xFF94FFA6),
                               width: 2,
                             ),
                           ),
@@ -48,7 +48,7 @@ class StartScreen extends StatelessWidget {
                   const Text(
                     'COCO',
                     style: TextStyle(
-                      color: Color(0xFF00FF00),
+                      color: Color(0xFF94FFA6),
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 2,
@@ -61,7 +61,7 @@ class StartScreen extends StatelessWidget {
                 'Your steps to\nsuccess',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFFC3ECCA),
                   fontSize: 28,
                   fontWeight: FontWeight.w500,
                 ),
@@ -76,7 +76,7 @@ class StartScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/signup');
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00FF00),
+                    backgroundColor: const Color(0xFF94FFA6),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
@@ -85,10 +85,7 @@ class StartScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     'Sign up',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -103,18 +100,15 @@ class StartScreen extends StatelessWidget {
                     Navigator.pushNamed(context, '/home');
                   },
                   style: OutlinedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    side: const BorderSide(color: Colors.white, width: 2),
+                    foregroundColor: const Color(0xFFC3ECCA),
+                    side: const BorderSide(color: Color(0xFFC3ECCA), width: 2),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
                   ),
                   child: const Text(
                     'Log in',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),

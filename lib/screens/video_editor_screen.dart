@@ -22,14 +22,14 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
   bool isPlaying = false;
   double currentPosition = 0.0;
   double totalDuration = 21.0;
-  
+
   double trimStart = 0.0;
   double trimEnd = 21.0;
-  
+
   List<TextOverlay> textOverlays = [];
-  
+
   String? audioTrackPath;
-  
+
   String selectedFilter = 'None';
 
   @override
@@ -41,28 +41,32 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
   void _initializeVideo() {
     if (widget.isVideo) {
       String videoPath = '/storage/emulated/0/Download/test_video.mp4';
-      
+
       _controller = VideoPlayerController.file(File(videoPath))
-        ..initialize().then((_) {
-          setState(() {
-            totalDuration = _controller!.value.duration.inSeconds.toDouble();
-            trimEnd = totalDuration;
-          });
-          
-          // Update position as video plays
-          _controller!.addListener(() {
-            if (_controller!.value.isPlaying) {
+        ..initialize()
+            .then((_) {
               setState(() {
-                currentPosition = _controller!.value.position.inSeconds.toDouble();
+                totalDuration = _controller!.value.duration.inSeconds
+                    .toDouble();
+                trimEnd = totalDuration;
               });
-            }
-          });
-        }).catchError((error) {
-          print('Error loading video: $error');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error loading video: $error')),
-          );
-        });
+
+              // Update position as video plays
+              _controller!.addListener(() {
+                if (_controller!.value.isPlaying) {
+                  setState(() {
+                    currentPosition = _controller!.value.position.inSeconds
+                        .toDouble();
+                  });
+                }
+              });
+            })
+            .catchError((error) {
+              print('Error loading video: $error');
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Error loading video: $error')),
+              );
+            });
     }
   }
 
@@ -87,13 +91,19 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 children: [
                   IconButton(
                     iconSize: 40,
-                    icon: const Icon(Icons.arrow_back, color: Color(0xFFC3ECCA)),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFFC3ECCA),
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
                   GestureDetector(
                     onTap: _exportVideo,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
                         color: Color(0xFF5EFF79),
                         borderRadius: BorderRadius.circular(20),
@@ -126,7 +136,8 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                     fit: StackFit.expand,
                     children: [
                       // Actual video player
-                      if (_controller != null && _controller!.value.isInitialized)
+                      if (_controller != null &&
+                          _controller!.value.isInitialized)
                         FittedBox(
                           fit: BoxFit.cover,
                           child: SizedBox(
@@ -139,10 +150,12 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                         Container(
                           color: Colors.black,
                           child: const Center(
-                            child: CircularProgressIndicator(color: Color(0xFF5EFF79)),
+                            child: CircularProgressIndicator(
+                              color: Color(0xFF5EFF79),
+                            ),
                           ),
                         ),
-                      
+
                       Center(
                         child: GestureDetector(
                           onTap: _togglePlayPause,
@@ -161,31 +174,31 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                           ),
                         ),
                       ),
-                      
-                      ...textOverlays.map((overlay) => Positioned(
-                        left: 50,
-                        top: 50,
-                        child: Text(
-                          overlay.text,
-                          style: TextStyle(
-                            color: overlay.color,
-                            fontSize: overlay.fontSize,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(1, 1),
-                                blurRadius: 3,
-                                color: Colors.black,
-                              ),
-                            ],
+
+                      ...textOverlays.map(
+                        (overlay) => Positioned(
+                          left: 50,
+                          top: 50,
+                          child: Text(
+                            overlay.text,
+                            style: TextStyle(
+                              color: overlay.color,
+                              fontSize: overlay.fontSize,
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(1, 1),
+                                  blurRadius: 3,
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      )),
-                      
+                      ),
+
                       if (selectedFilter != 'None')
-                        Container(
-                          color: _getFilterColor(),
-                        ),
+                        Container(color: _getFilterColor()),
                     ],
                   ),
                 ),
@@ -196,7 +209,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
 
             if (audioTrackPath != null)
               Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF2A2A2A),
@@ -204,7 +220,11 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.music_note, color: Color(0xFF5EFF79), size: 20),
+                    const Icon(
+                      Icons.music_note,
+                      color: Color(0xFF5EFF79),
+                      size: 20,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
@@ -213,7 +233,11 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white, size: 18),
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                       onPressed: () {
                         setState(() {
                           audioTrackPath = null;
@@ -252,8 +276,9 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                         color: const Color(0xFF2A2A2A),
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(
-                          color: index >= (trimStart / totalDuration * 10) &&
-                                 index <= (trimEnd / totalDuration * 10)
+                          color:
+                              index >= (trimStart / totalDuration * 10) &&
+                                  index <= (trimEnd / totalDuration * 10)
                               ? Color(0xFF5EFF79)
                               : Colors.transparent,
                           width: 2,
@@ -265,7 +290,7 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
               ],
             ),
           ),
-          
+
           Container(
             margin: const EdgeInsets.symmetric(vertical: 10),
             child: Row(
@@ -310,7 +335,11 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
           _buildControlButton(Icons.audio_file, 'Audio', _addAudioTrack),
           _buildControlButton(Icons.text_fields, 'Text', _showTextDialog),
           _buildControlButton(Icons.tune, 'Filter', _showFilterDialog),
-          _buildControlButton(Icons.subtitles, 'Captions', _showCaptionsPlaceholder),
+          _buildControlButton(
+            Icons.subtitles,
+            'Captions',
+            _showCaptionsPlaceholder,
+          ),
         ],
       ),
     );
@@ -329,20 +358,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
               color: const Color(0xFF2A2A2A),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              icon,
-              color: Color(0xFF5EFF79),
-              size: 24,
-            ),
+            child: Icon(icon, color: Color(0xFF5EFF79), size: 24),
           ),
           const SizedBox(height: 8),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.grey[400],
-              fontSize: 11,
-            ),
-          ),
+          Text(label, style: TextStyle(color: Colors.grey[400], fontSize: 11)),
         ],
       ),
     );
@@ -352,7 +371,7 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
     setState(() {
       isPlaying = !isPlaying;
     });
-    
+
     if (_controller != null && _controller!.value.isInitialized) {
       if (isPlaying) {
         _controller!.play();
@@ -368,12 +387,17 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           backgroundColor: const Color(0xFF1A1A1A),
-          title: const Text('Trim Video', style: TextStyle(color: Colors.white)),
+          title: const Text(
+            'Trim Video',
+            style: TextStyle(color: Colors.white),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Start: ${_formatDuration(trimStart)}', 
-                   style: TextStyle(color: Colors.grey[300])),
+              Text(
+                'Start: ${_formatDuration(trimStart)}',
+                style: TextStyle(color: Colors.grey[300]),
+              ),
               Slider(
                 value: trimStart,
                 max: totalDuration,
@@ -387,8 +411,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              Text('End: ${_formatDuration(trimEnd)}', 
-                   style: TextStyle(color: Colors.grey[300])),
+              Text(
+                'End: ${_formatDuration(trimEnd)}',
+                style: TextStyle(color: Colors.grey[300]),
+              ),
               Slider(
                 value: trimEnd,
                 max: totalDuration,
@@ -414,12 +440,17 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Video trimmed: ${_formatDuration(trimStart)} - ${_formatDuration(trimEnd)}'),
+                    content: Text(
+                      'Video trimmed: ${_formatDuration(trimStart)} - ${_formatDuration(trimEnd)}',
+                    ),
                     backgroundColor: Color(0xFF5EFF79),
                   ),
                 );
               },
-              child: const Text('Apply', style: TextStyle(color: Color(0xFF5EFF79))),
+              child: const Text(
+                'Apply',
+                style: TextStyle(color: Color(0xFF5EFF79)),
+              ),
             ),
           ],
         ),
@@ -447,7 +478,7 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
 
   void _showTextDialog() {
     TextEditingController textController = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -481,11 +512,13 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
             onPressed: () {
               if (textController.text.isNotEmpty) {
                 setState(() {
-                  textOverlays.add(TextOverlay(
-                    text: textController.text,
-                    color: Colors.white,
-                    fontSize: 24,
-                  ));
+                  textOverlays.add(
+                    TextOverlay(
+                      text: textController.text,
+                      color: Colors.white,
+                      fontSize: 24,
+                    ),
+                  );
                 });
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -496,7 +529,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 );
               }
             },
-            child: const Text('Add', style: TextStyle(color: Color(0xFF5EFF79))),
+            child: const Text(
+              'Add',
+              style: TextStyle(color: Color(0xFF5EFF79)),
+            ),
           ),
         ],
       ),
@@ -508,7 +544,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text('Select Filter', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Select Filter',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -549,7 +588,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text('Auto Captions', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Auto Captions',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -571,7 +613,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Got it', style: TextStyle(color: Color(0xFF5EFF79))),
+            child: const Text(
+              'Got it',
+              style: TextStyle(color: Color(0xFF5EFF79)),
+            ),
           ),
         ],
       ),
@@ -584,7 +629,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text('Export Video', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Export Video',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [

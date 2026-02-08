@@ -9,10 +9,9 @@ class RecommendationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = Provider.of<OnboardingProvider>(context);
     final recommendations = provider.getRecommendations();
-    final targetAudience = provider.data.targetAudience ?? 'your audience';
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF0F0F0F), // Match home screen
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -20,21 +19,43 @@ class RecommendationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              // Title
-              const Text(
-                'No worries, that means we can build your presence from the ground up',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
+              // Title with green highlight
+              RichText(
+                text: const TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'No worries, that means ',
+                      style: TextStyle(
+                        color: Color(0xFFC3ECCA),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'we can build your presence',
+                      style: TextStyle(
+                        color: Color(0xFF94FFA6),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' from the ground up',
+                      style: TextStyle(
+                        color: Color(0xFFC3ECCA),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 40),
               // Recommendation text
               Text(
-                'First things first, we need to setup your social media accounts, for your audience We\'d recommend ${_formatPlatformList(recommendations)}',
+                'First things first, we need to setup your social media accounts. For your audience we\'d recommend ${_formatPlatformList(recommendations)}',
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFFC3ECCA),
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -54,7 +75,7 @@ class RecommendationScreen extends StatelessWidget {
               const Text(
                 'To setup for Instagram/Facebook we have to create a Meta business account, this can be done by clicking on this link.',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Color(0xFFC3ECCA),
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -69,25 +90,19 @@ class RecommendationScreen extends StatelessWidget {
                     // TODO: Open Meta business account link
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
+                    backgroundColor: const Color(0xFFC3ECCA),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
                     ),
                     elevation: 0,
                   ),
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/meta_logo.png', // You'll need to add this asset
-                        height: 24,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.business, color: Colors.blue);
-                        },
-                      ),
-                      const SizedBox(width: 12),
-                      const Text(
+                      Icon(Icons.business, color: Color(0xFF1877F2), size: 24),
+                      SizedBox(width: 12),
+                      Text(
                         'Meta',
                         style: TextStyle(
                           fontSize: 18,
@@ -101,10 +116,7 @@ class RecommendationScreen extends StatelessWidget {
               const SizedBox(height: 16),
               const Text(
                 'This will allow you to post on the business account through our application',
-                style: TextStyle(
-                  color: Colors.grey,
-                  fontSize: 14,
-                ),
+                style: TextStyle(color: Color(0xFF5C6E5F), fontSize: 14),
               ),
               const SizedBox(height: 24),
               // Next button
@@ -120,7 +132,7 @@ class RecommendationScreen extends StatelessWidget {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF00FF00),
+                    backgroundColor: const Color(0xFF94FFA6),
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(28),
@@ -129,10 +141,7 @@ class RecommendationScreen extends StatelessWidget {
                   ),
                   child: const Text(
                     'Next',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -148,7 +157,7 @@ class RecommendationScreen extends StatelessWidget {
     if (platforms.isEmpty) return 'social media platforms';
     if (platforms.length == 1) return platforms.first;
     if (platforms.length == 2) return '${platforms[0]} and ${platforms[1]}';
-    
+
     String result = '';
     for (int i = 0; i < platforms.length; i++) {
       if (i == platforms.length - 1) {
@@ -175,7 +184,7 @@ class RecommendationScreen extends StatelessWidget {
         break;
       case 'TikTok':
         icon = Icons.music_note;
-        color = Colors.black;
+        color = Colors.white;
         break;
       case 'LinkedIn':
         icon = Icons.business;
@@ -191,14 +200,15 @@ class RecommendationScreen extends StatelessWidget {
         break;
       default:
         icon = Icons.public;
-        color = const Color(0xFF00FF00);
+        color = const Color(0xFF94FFA6);
     }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFF00FF00), width: 1.5),
+        color: const Color(0xFF1a1a1a),
+        border: Border.all(color: const Color(0xFF5EFF79), width: 1.5),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -206,7 +216,7 @@ class RecommendationScreen extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: color.withOpacity(0.1),
+              color: color.withOpacity(0.15),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: color, size: 24),
@@ -215,7 +225,7 @@ class RecommendationScreen extends StatelessWidget {
           Text(
             platform,
             style: const TextStyle(
-              color: Colors.white,
+              color: Color(0xFFC3ECCA),
               fontSize: 18,
               fontWeight: FontWeight.w500,
             ),
