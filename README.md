@@ -8,7 +8,8 @@ This is a university project developed by **Artur Buivydis** and **Mantas Grusau
 # Api base URL configuration
 
 The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
-` class AuthService {
+` 
+<pre> ```class AuthService {
   // Android emulator
   // static const String _baseUrl = 'http://10.0.2.2:3000/api/auth';
 
@@ -17,8 +18,7 @@ The Flutter app switches API base URLs depending on the runtime environment. Exa
 
   // Physical Android device
   static const String _baseUrl = 'http://192.168.0.100:3000/api/auth';
-} `
-
+}  ``` </pre>
 ##Contributors
 -Artur Buivydis (https://github.com/arturbui)
 -Mantas Grusauskas (https://github.com/MantasGrusa)
