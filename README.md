@@ -17,12 +17,25 @@ This repository contains both the Flutter mobile application and the Node.js bac
 To clone the project repository locally, run the following command:
 <pre> git clone https://github.com/arturbui/COCOapp.git </pre>
 Navigate into the project directory:
-<pre>cd cocoapp</pre>
+<pre>cd COCOapp</pre>
+
+## Running the project locally
+### Backend setup
+Navigate to the backend directory:
+<pre>cd COCOapp/coco-backend</pre>
+Install dependencies:
+<pre>npm install</pre>
+Create a `.env`file in `coco-backend` with the following contents:
+<pre>ANTHROPIC_API_KEY=your_api_key_here</pre>
+Start the backend server in coco-backend:
+<pre>npm start</pre>
+
+### Frontend setup
 ## Api base URL configuration
 
 The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
 ` 
-<pre> dart class AuthService {
+<pre> ```dart class AuthService {
   // Android emulator
   // static const String _baseUrl = 'http://10.0.2.2:3000/api/auth';
 
@@ -31,7 +44,7 @@ The Flutter app switches API base URLs depending on the runtime environment. Exa
 
   // Physical Android device
   static const String _baseUrl = 'http://192.168.0.100:3000/api/auth';
-}  </pre>
+}  ```</pre>
 ## Contributors
 - Artur Buivydis (https://github.com/arturbui)
 - Mantas Grusauskas (https://github.com/MantasGrusa)
