@@ -31,6 +31,11 @@ Start the backend server in coco-backend:
 <pre>npm start</pre>
 
 ### Frontend setup
+1. Open the project in Android Studio
+2. Ensure Flutter and Dart are installed
+3. Connect an Android device or start an emulator
+4. Run the application:
+<pre>flutter run</pre>
 ## Api base URL configuration
 
 The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
