@@ -21,6 +21,8 @@ Navigate into the project directory:
 
 ## Running the project locally
 ### Backend setup
+Create a `.env`file in `COCOapp` with the following contents:
+<pre>ANTHROPIC_API_KEY=your_api_key_here</pre>
 Navigate to the backend directory:
 <pre>cd COCOapp/coco-backend</pre>
 Install dependencies:
@@ -38,18 +40,41 @@ Start the backend server in coco-backend:
 <pre>flutter run</pre>
 ## Api base URL configuration
 
-The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
-` 
-<pre> ```dart class AuthService {
-  // Android emulator
-  // static const String _baseUrl = 'http://10.0.2.2:3000/api/auth';
+To get the backend to run you will need to make to changes based on your environment. 
+#### backend_service.dart
 
-  // Browser or local testing
-  // static const String _baseUrl = 'http://localhost:3000/api/auth';
+```dart
+class BackendService {
+  // Change this to your computer's IP address when testing on phone
+  // For web: use localhost:3000
+  // For android: use http://192.168.2.33:3000/api
+  static const String baseUrl = 'http://localhost:3000/api';
 
-  // Physical Android device
-  static const String _baseUrl = 'http://192.168.0.100:3000/api/auth';
-}  ```</pre>
+  String? _token;
+
+```
+- `10.0.2.2` is used for Android Emulators
+- `localhost` is used for browser testing
+- If you're using an android device, a local IPv4 adress is required
+
+#### claude_service.dart
+```dart
+class ClaudeService {
+  static const String _baseUrl = 'http://localhost:3000/api/claude';
+
+  Future<String> _getAuthToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('auth_token');
+    if (token == null) {
+      throw Exception('Please login first');
+    }
+    return token;
+  }
+
+```
+- `10.0.2.2` is used for Android Emulators
+- `localhost` is used for browser testing
+- If you're using an android device, a local IPv4 adress is required
 ## Contributors
 - Artur Buivydis (https://github.com/arturbui)
 - Mantas Grusauskas (https://github.com/MantasGrusa)
