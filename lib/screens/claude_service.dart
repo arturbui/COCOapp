@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ClaudeService {
-  static const String _baseUrl = 'http://localhost:3000/api/claude';
+  static const String _baseUrl = 'http://10.0.2.2:3000/api/claude';
 
   Future<String> _getAuthToken() async {
     final prefs = await SharedPreferences.getInstance();

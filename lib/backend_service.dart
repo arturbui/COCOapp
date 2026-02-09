@@ -6,7 +6,7 @@ class BackendService {
   // Change this to your computer's IP address when testing on phone
   // For web: use localhost:3000
   // For android: use http://192.168.2.33:3000/api
-  static const String baseUrl = 'http://192.168.2.33:3000/api';
+  static const String baseUrl = 'http://10.0.2.2:3000/api';
 
   String? _token;
 
@@ -60,7 +60,6 @@ class BackendService {
     }
   }
 
-  // Login
   Future<Map<String, dynamic>?> login(String email, String password) async {
     try {
       final response = await http.post(
