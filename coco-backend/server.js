@@ -1,12 +1,15 @@
+
 // server.js - COCO Backend Server
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config(); // ADD THIS LINE
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = 'your-secret-key-change-this-in-production';
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY; // ADD THIS LINE
 
 // Middleware
 app.use(cors());
@@ -212,6 +215,43 @@ app.get('/api/recommendations', authenticateToken, (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+// ============= CLAUDE AI CHATBOT ENDPOINT =============
+
+app.post('/api/claude', authenticateToken, async (req, res) => {
+  try {
+    const { model, max_tokens, messages, system } = req.body;
+
+    if (!ANTHROPIC_API_KEY) {
+      return res.status(500).json({ error: 'API key not configured' });
+    }
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model: model || 'claude-sonnet-4-20250514',
+        max_tokens: max_tokens || 4096,
+        messages: messages,
+        system: system || 'You are a helpful marketing assistant for COCO app.',
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(response.status).json(data);
+    }
+
+    res.json(data);
+  } catch (error) {
+    console.error('Claude API Error:', error);
+    res.status(500).json({ error: 'Error calling Claude API: ' + error.message });
+  }
+});
 
 // ============= MIDDLEWARE =============
 
@@ -244,7 +284,10 @@ app.listen(PORT, () => {
   console.log(`   GET  /api/onboarding`);
   console.log(`   GET  /api/user/profile`);
   console.log(`   GET  /api/recommendations`);
+  console.log(`   POST /api/claude`); // ADD THIS LINE
+  console.log(`   GET  /api/users`);
 });
+
 // get users
 app.get('/api/users', (req, res) => {
   res.json(users.map(u => ({

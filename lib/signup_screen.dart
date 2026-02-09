@@ -314,42 +314,51 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             if (_formKey.currentState!.validate()) {
                               setState(() => _isLoading = true);
 
-                              // Sign up with backend
-                              final result = await _backendService.signUp(
-                                _usernameController.text,
-                                _emailController.text,
-                                _passwordController.text,
-                              );
-
-                              setState(() => _isLoading = false);
-
-                              if (result != null) {
-                                // Success! Navigate to onboarding
-                                Navigator.pushNamed(
-                                  context,
-                                  '/onboarding/question1',
+                              try {
+                                // 1. Trigger the signup and WAIT for the response
+                                // The BackendService should handle the 'await prefs.setString' internally
+                                final result = await _backendService.signUp(
+                                  _usernameController.text.trim(),
+                                  _emailController.text.trim(),
+                                  _passwordController.text,
                                 );
-                              } else {
-                                // Show error
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Sign up failed. Please try again.',
+
+                                // 2. Check if the widget is still in the tree before proceeding
+                                if (!mounted) return;
+
+                                setState(() => _isLoading = false);
+
+                                if (result != null) {
+                                  // SUCCESS: Token is saved, move to onboarding
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/onboarding/question1',
+                                  );
+                                } else {
+                                  // FAILURE: Show error
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Sign up failed. Please try again.',
+                                      ),
+                                      backgroundColor: Colors.red,
                                     ),
-                                    backgroundColor: Colors.red,
-                                  ),
-                                );
+                                  );
+                                }
+                              } catch (e) {
+                                // Handle unexpected network or storage errors
+                                if (mounted) {
+                                  setState(() => _isLoading = false);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Error: $e'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                }
                               }
                             }
                           },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF94FFA6),
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(28),
-                      ),
-                      elevation: 0,
-                    ),
                     child: _isLoading
                         ? const SizedBox(
                             width: 20,

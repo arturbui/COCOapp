@@ -17,14 +17,20 @@ import 'screens/video_editor_screen.dart';
 import 'screens/dashboard_screen.dart';
 
 Future<void> main() async {
-  // Load environment variables for Claude API (skip if file not found)
+  // Initialize Flutter bindings FIRST
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Load environment variables for Claude API
   try {
     await dotenv.load(fileName: ".env");
+    print('✓ API key loaded successfully');
   } catch (e) {
     print(
       'Warning: .env file not found. Claude chatbot will not work without API key.',
     );
+    print('Error details: $e');
   }
+
   runApp(const MyApp());
 }
 

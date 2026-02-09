@@ -13,7 +13,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final BackendService _backendService = BackendService();
-  
+
   bool _obscurePassword = true;
   bool _isLoading = false;
 
@@ -95,10 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 const Text(
                   'Log in to continue',
-                  style: TextStyle(
-                    color: Color(0xFFC3ECCA),
-                    fontSize: 16,
-                  ),
+                  style: TextStyle(color: Color(0xFFC3ECCA), fontSize: 16),
                 ),
                 const SizedBox(height: 40),
                 // Email field
@@ -121,21 +118,33 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Color(0xFF5EFF79), width: 1.5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF5EFF79),
+                        width: 1.5,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Color(0xFF94FFA6), width: 2),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF94FFA6),
+                        width: 2,
+                      ),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Colors.red, width: 1.5),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 1.5,
+                      ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
                       borderSide: const BorderSide(color: Colors.red, width: 2),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -168,24 +177,38 @@ class _LoginScreenState extends State<LoginScreen> {
                     filled: false,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Color(0xFF5EFF79), width: 1.5),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF5EFF79),
+                        width: 1.5,
+                      ),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Color(0xFF94FFA6), width: 2),
+                      borderSide: const BorderSide(
+                        color: Color(0xFF94FFA6),
+                        width: 2,
+                      ),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
-                      borderSide: const BorderSide(color: Colors.red, width: 1.5),
+                      borderSide: const BorderSide(
+                        color: Colors.red,
+                        width: 1.5,
+                      ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(28),
                       borderSide: const BorderSide(color: Colors.red, width: 2),
                     ),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
                         color: const Color(0xFF5C6E5F),
                       ),
                       onPressed: () {
@@ -224,7 +247,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             height: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.black,
+                              ),
                             ),
                           )
                         : const Text(
@@ -278,29 +303,45 @@ class _LoginScreenState extends State<LoginScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      final result = await _backendService.login(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
-
-      setState(() => _isLoading = false);
-
-      if (result != null && mounted) {
-        // Login successful - navigate to home
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/home',
-          (route) => false,
+      try {
+        // 1. Await the login and the internal token saving process
+        final result = await _backendService.login(
+          _emailController.text.trim(),
+          _passwordController.text,
         );
-      } else if (mounted) {
-        // Login failed
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Login failed. Check your email and password.'),
-            backgroundColor: Colors.red,
-          ),
-        );
+
+        // 2. Safety check: make sure the screen is still there
+        if (!mounted) return;
+
+        setState(() => _isLoading = false);
+
+        if (result != null) {
+          // SUCCESS: Use pushNamedAndRemoveUntil so they can't 'back' into the login screen
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        } else {
+          // FAILURE: Show user-friendly error
+          _showErrorSnackBar('Login failed. Check your email and password.');
+        }
+      } catch (e) {
+        // Handle network errors or storage crashes
+        if (mounted) {
+          setState(() => _isLoading = false);
+          _showErrorSnackBar(
+            'An error occurred. Please check your connection.',
+          );
+        }
       }
     }
+  }
+
+  // Helper for cleaner code
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 }
