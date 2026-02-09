@@ -116,13 +116,15 @@ class CreateScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildNavItem(Icons.home, false, () {
-            Navigator.pop(context);
+            Navigator.pushNamed(context, '/home');
           }),
           _buildNavItem(Icons.chat_bubble_outline, false, () {
             Navigator.pushNamed(context, '/chat');
           }),
           _buildNavItem(Icons.add_box_outlined, true, () {}),
-          _buildNavItem(Icons.notifications_outlined, false, () {}),
+          _buildNavItem(Icons.bar_chart_rounded, false, () {
+            Navigator.pushNamed(context, '/dashboard');
+          }),
           _buildNavItem(Icons.person_outline, false, () {
             Navigator.pushNamed(context, '/profile');
           }),

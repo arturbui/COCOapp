@@ -17,7 +17,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   List<ChatMessage> _messages = [];
   bool _isLoading = false;
-  String? _userName; // null until fetched
+  String? _userName; 
 
   @override
   void initState() {
@@ -78,7 +78,6 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollToBottom();
 
     try {
-      // Build conversation history for context
       List<Map<String, String>> history = _messages
           .where((msg) => msg.text != _messages.first.text)
           .map(
@@ -89,7 +88,6 @@ class _ChatScreenState extends State<ChatScreen> {
           )
           .toList();
 
-      // Get response from Claude
       final response = await _claudeService.sendMessage(
         userMessage,
         conversationHistory: history,
@@ -234,7 +232,9 @@ class _ChatScreenState extends State<ChatScreen> {
           _buildNavItem(Icons.add_box_outlined, false, () {
             Navigator.pushNamed(context, '/create');
           }),
-          _buildNavItem(Icons.notifications_outlined, false, () {}),
+          _buildNavItem(Icons.bar_chart_rounded, false, () {
+            Navigator.pushNamed(context, '/dashboard');
+          }),
           _buildNavItem(Icons.person_outline, false, () {
             Navigator.pushNamed(context, '/profile');
           }),

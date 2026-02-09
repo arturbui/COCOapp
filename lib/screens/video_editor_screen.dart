@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:video_player/video_player.dart';
 import 'package:file_picker/file_picker.dart';
+import 'post_schedule_screen.dart';
 
 class VideoEditorScreen extends StatefulWidget {
   final String filePath;
@@ -51,7 +52,6 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 trimEnd = totalDuration;
               });
 
-              // Update position as video plays
               _controller!.addListener(() {
                 if (_controller!.value.isPlaying) {
                   setState(() {
@@ -83,7 +83,6 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Top bar
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
@@ -122,7 +121,6 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
               ),
             ),
 
-            // Video preview
             Expanded(
               child: Container(
                 margin: const EdgeInsets.all(20),
@@ -135,26 +133,33 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      // Actual video player
-                      if (_controller != null &&
-                          _controller!.value.isInitialized)
-                        FittedBox(
-                          fit: BoxFit.cover,
-                          child: SizedBox(
-                            width: _controller!.value.size.width,
-                            height: _controller!.value.size.height,
-                            child: VideoPlayer(_controller!),
-                          ),
-                        )
-                      else
-                        Container(
-                          color: Colors.black,
-                          child: const Center(
-                            child: CircularProgressIndicator(
-                              color: Color(0xFF5EFF79),
+                      Image.network(
+                        'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400',
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            color: Colors.black,
+                            child: const Center(
+                              child: CircularProgressIndicator(
+                                color: Color(0xFF5EFF79),
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            color: Colors.black,
+                            child: const Center(
+                              child: Icon(
+                                Icons.image,
+                                color: Colors.grey,
+                                size: 60,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
 
                       Center(
                         child: GestureDetector(
@@ -442,6 +447,7 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                   SnackBar(
                     content: Text(
                       'Video trimmed: ${_formatDuration(trimStart)} - ${_formatDuration(trimEnd)}',
+                      style: const TextStyle(color: Colors.black),
                     ),
                     backgroundColor: Color(0xFF5EFF79),
                   ),
@@ -469,7 +475,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Audio track added!'),
+          content: Text(
+            'Audio track added!',
+            style: TextStyle(color: Colors.black),
+          ),
           backgroundColor: Color(0xFF5EFF79),
         ),
       );
@@ -523,7 +532,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Text overlay added!'),
+                    content: Text(
+                      'Text overlay added!',
+                      style: TextStyle(color: Colors.black),
+                    ),
                     backgroundColor: Color(0xFF5EFF79),
                   ),
                 );
@@ -575,7 +587,10 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('$filterName filter applied!'),
+            content: Text(
+              '$filterName filter applied!',
+              style: const TextStyle(color: Colors.black),
+            ),
             backgroundColor: Color(0xFF5EFF79),
           ),
         );
@@ -624,39 +639,14 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
   }
 
   void _exportVideo() {
-    // This will handle the final video export with all edits applied
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1A1A1A),
-        title: const Text(
-          'Export Video',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const CircularProgressIndicator(color: Color(0xFF5EFF79)),
-            const SizedBox(height: 20),
-            Text(
-              'Exporting your video...',
-              style: TextStyle(color: Colors.grey[300]),
-            ),
-          ],
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PostScheduleScreen(
+          videoPath: widget.filePath,
         ),
       ),
     );
-
-    // Simulate export process
-    Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context); // Close export dialog
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Video exported successfully!'),
-          backgroundColor: Color(0xFF5EFF79),
-        ),
-      );
-    });
   }
 
   Color _getFilterColor() {
@@ -681,7 +671,6 @@ class _VideoEditorScreenState extends State<VideoEditorScreen> {
   }
 }
 
-// Text overlay model
 class TextOverlay {
   final String text;
   final Color color;

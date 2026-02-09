@@ -52,7 +52,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 20),
-                    // Title
                     const Text(
                       'Profile',
                       style: TextStyle(
@@ -62,10 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     const SizedBox(height: 40),
-                    // Profile Picture and Name
                     Row(
                       children: [
-                        // Profile Picture Circle
                         Container(
                           width: 120,
                           height: 120,
@@ -80,7 +77,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(width: 20),
-                        // Username with edit icon
                         Expanded(
                           child: Row(
                             children: [
@@ -112,7 +108,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 60),
-                    // Menu Buttons (only 3 now)
                     _buildMenuButton('Settings', () {
                       _showComingSoon(context);
                     }),
@@ -125,7 +120,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       _showComingSoon(context);
                     }),
                     const Spacer(),
-                    // Log Out Button at bottom
                     _buildLogOutButton(),
                     const SizedBox(height: 40),
                   ],
@@ -210,7 +204,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildNavItem(Icons.add_box_outlined, false, () {
             Navigator.pushNamed(context, '/create');
           }),
-          _buildNavItem(Icons.notifications_outlined, false, () {}),
+          _buildNavItem(Icons.bar_chart_rounded, false, () {
+            Navigator.pushNamed(context, '/dashboard');
+          }),
           _buildNavItem(Icons.person, true, () {}),
         ],
       ),
@@ -267,7 +263,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             ElevatedButton(
               onPressed: () async {
-                // Clear auth token
                 await _backendService.clearToken();
 
                 Navigator.pop(context);

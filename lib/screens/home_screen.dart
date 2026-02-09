@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../backend_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,24 +20,35 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    _clearOldAdData();
     _loadUserData();
+  }
+
+  Future<void> _clearOldAdData() async {
+    // Clear the local ad data when app starts fresh
+    // This ensures the image only shows after posting in the current session
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('has_posted_ad');
+    await prefs.remove('latest_ad_views');
+    await prefs.remove('latest_ad_clicks');
+    await prefs.remove('latest_ad_ctr');
   }
 
   Future<void> _loadUserData() async {
     final isAuth = await _backendService.isAuthenticated();
 
     if (!isAuth) {
-      // Instead of redirecting, show default data
       if (mounted) {
         setState(() {
           username = 'Guest';
           _isLoading = false;
         });
       }
+      // Still check for local ad data even if not authenticated
+      await _loadLocalAdData();
       return;
     }
 
-    // Load data as before...
     final results = await Future.wait([
       _backendService.getUserProfile(),
       _backendService.getUserStats(),
@@ -51,6 +63,26 @@ class _HomeScreenState extends State<HomeScreen> {
         _stats = results[1];
         _adPerformance = results[2];
         _isLoading = false;
+      });
+      
+      // If backend didn't return ad performance, check local storage
+      if (_adPerformance == null) {
+        await _loadLocalAdData();
+      }
+    }
+  }
+
+  Future<void> _loadLocalAdData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final hasPosted = prefs.getBool('has_posted_ad') ?? false;
+    
+    if (hasPosted && mounted) {
+      setState(() {
+        _adPerformance = {
+          'views': prefs.getString('latest_ad_views') ?? '0',
+          'clicks': prefs.getString('latest_ad_clicks') ?? '0',
+          'ctr': prefs.getString('latest_ad_ctr') ?? '0',
+        };
       });
     }
   }
@@ -153,48 +185,86 @@ class _HomeScreenState extends State<HomeScreen> {
           stops: [0.2, 0.35],
         ),
       ),
-      child: _adPerformance != null
-          ? Padding(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Latest Ad Performance',
-                    style: TextStyle(
-                      color: Color(0xFF94FFA6),
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Stack(
+          children: [
+            // Background image (shows when ad performance exists)
+            if (_adPerformance != null)
+              Positioned.fill(
+                child: Image.network(
+                  'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400',
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return const SizedBox.shrink();
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return const SizedBox.shrink();
+                  },
+                ),
+              ),
+            
+            // Stats overlay (shows when ad performance exists)
+            if (_adPerformance != null)
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.6),
+                      Colors.black.withOpacity(0.4),
+                    ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildStatItem(
-                        'Views',
-                        _adPerformance!['views']?.toString() ?? '0',
+                      const Text(
+                        'Latest Ad Performance',
+                        style: TextStyle(
+                          color: Color(0xFF94FFA6),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      _buildStatItem(
-                        'Clicks',
-                        _adPerformance!['clicks']?.toString() ?? '0',
-                      ),
-                      _buildStatItem(
-                        'CTR',
-                        '${_adPerformance!['ctr']?.toString() ?? '0'}%',
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          _buildStatItem(
+                            'Views',
+                            _adPerformance!['views']?.toString() ?? '0',
+                          ),
+                          _buildStatItem(
+                            'Clicks',
+                            _adPerformance!['clicks']?.toString() ?? '0',
+                          ),
+                          _buildStatItem(
+                            'CTR',
+                            '${_adPerformance!['ctr']?.toString() ?? '0'}%',
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
+              )
+            else
+              // No data placeholder
+              const Center(
+                child: Text(
+                  'Upload something first',
+                  style: TextStyle(color: Color(0xFF94FFA6), fontSize: 14),
+                ),
               ),
-            )
-          : const Center(
-              child: Text(
-                'No ad data available',
-                style: TextStyle(color: Color(0xFF94FFA6), fontSize: 14),
-              ),
-            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -385,7 +455,9 @@ class _HomeScreenState extends State<HomeScreen> {
           _buildNavItem(Icons.add_box_outlined, false, () {
             Navigator.pushNamed(context, '/create');
           }),
-          _buildNavItem(Icons.notifications_outlined, false, () {}),
+          _buildNavItem(Icons.bar_chart_rounded, false, () {
+            Navigator.pushNamed(context, '/dashboard');
+          }),
           _buildNavItem(Icons.person_outline, false, () {
             Navigator.pushNamed(context, '/profile');
           }),

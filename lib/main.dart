@@ -14,6 +14,7 @@ import 'profile_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/create_screen.dart';
 import 'screens/video_editor_screen.dart';
+import 'screens/dashboard_screen.dart';
 
 Future<void> main() async {
   // Load environment variables for Claude API (skip if file not found)
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
           '/chat': (context) => const ChatScreen(),
           '/home': (context) => const HomeScreen(),
           '/profile': (context) => const ProfileScreen(),
+          '/dashboard': (context) => const DashboardScreen(),
           '/create': (context) => CreateScreen(),
           '/editor': (context) =>
               const VideoEditorScreen(filePath: '', isVideo: true),

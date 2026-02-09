@@ -5,7 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ClaudeService {
   static const String _baseUrl = 'https://api.anthropic.com/v1/messages';
   
-  // Get API key from environment variables
   String get _apiKey => dotenv.env['ANTHROPIC_API_KEY'] ?? '';
 
   Future<String> sendMessage(String userMessage, {List<Map<String, String>>? conversationHistory}) async {
@@ -13,15 +12,12 @@ class ClaudeService {
       throw Exception('API key not found. Please add ANTHROPIC_API_KEY to .env file');
     }
 
-    // Build messages array
     List<Map<String, String>> messages = [];
     
-    // Add conversation history if provided
     if (conversationHistory != null) {
       messages.addAll(conversationHistory);
     }
     
-    // Add current user message
     messages.add({
       'role': 'user',
       'content': userMessage,
@@ -54,7 +50,6 @@ class ClaudeService {
     }
   }
 
-  // Helper method for single message (no history)
   Future<String> chat(String message) async {
     return await sendMessage(message);
   }

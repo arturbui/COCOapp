@@ -6,7 +6,7 @@ class BackendService {
   // Change this to your computer's IP address when testing on phone
   // For web: use localhost:3000
   // For android: use http://192.168.2.33:3000/api
-  static const String baseUrl = 'http://localhost:3000/api';
+  static const String baseUrl = 'http://192.168.2.33:3000/api';
 
   String? _token;
 
