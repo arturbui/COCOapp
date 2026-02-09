@@ -1,40 +1,32 @@
 
-// server.js - COCO Backend Server
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config(); // ADD THIS LINE
+require('dotenv').config(); 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = 'your-secret-key-change-this-in-production';
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY; // ADD THIS LINE
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY; 
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// In-memory database (for demo - replace with real DB later)
 const users = [];
 const onboardingData = {};
 
-// ============= AUTH ENDPOINTS =============
 
-// Sign up
 app.post('/api/auth/signup', async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
-    // Check if user exists
     if (users.find(u => u.email === email)) {
       return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user
     const user = {
       id: users.length + 1,
       username,
@@ -45,7 +37,6 @@ app.post('/api/auth/signup', async (req, res) => {
 
     users.push(user);
 
-    // Create JWT token
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
 
     res.status(201).json({
@@ -62,24 +53,20 @@ app.post('/api/auth/signup', async (req, res) => {
   }
 });
 
-// Login
 app.post('/api/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user
     const user = users.find(u => u.email === email);
     if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Check password
     const isValidPassword = await bcrypt.compare(password, user.password);
     if (!isValidPassword) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Create JWT token
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
 
     res.json({
@@ -96,9 +83,7 @@ app.post('/api/auth/login', async (req, res) => {
   }
 });
 
-// ============= ONBOARDING ENDPOINTS =============
 
-// Save onboarding data
 app.post('/api/onboarding', authenticateToken, (req, res) => {
   try {
     const userId = req.user.id;
@@ -119,7 +104,6 @@ app.post('/api/onboarding', authenticateToken, (req, res) => {
   }
 });
 
-// Get onboarding data
 app.get('/api/onboarding', authenticateToken, (req, res) => {
   try {
     const userId = req.user.id;
@@ -135,9 +119,7 @@ app.get('/api/onboarding', authenticateToken, (req, res) => {
   }
 });
 
-// ============= USER ENDPOINTS =============
 
-// Get user profile
 app.get('/api/user/profile', authenticateToken, (req, res) => {
   try {
     const userId = req.user.id;
@@ -160,9 +142,7 @@ app.get('/api/user/profile', authenticateToken, (req, res) => {
   }
 });
 
-// ============= RECOMMENDATIONS ENDPOINT =============
 
-// Get recommendations based on onboarding
 app.get('/api/recommendations', authenticateToken, (req, res) => {
   try {
     const userId = req.user.id;
@@ -172,10 +152,8 @@ app.get('/api/recommendations', authenticateToken, (req, res) => {
       return res.status(404).json({ error: 'Complete onboarding first' });
     }
 
-    // Recommendation logic
     const recommendations = [];
 
-    // Based on target audience
     if (data.targetAudience === 'Local customers') {
       recommendations.push('Facebook', 'Instagram');
     } else if (data.targetAudience === 'Professionals / B2B') {
@@ -188,7 +166,6 @@ app.get('/api/recommendations', authenticateToken, (req, res) => {
       recommendations.push('Instagram', 'YouTube');
     }
 
-    // Based on business type
     if (data.businessType === 'Local business') {
       recommendations.push('Facebook', 'Instagram');
     } else if (data.businessType === 'Online store') {
@@ -201,7 +178,6 @@ app.get('/api/recommendations', authenticateToken, (req, res) => {
       recommendations.push('LinkedIn', 'Twitter');
     }
 
-    // Remove duplicates
     const uniqueRecommendations = [...new Set(recommendations)];
 
     res.json({
@@ -215,7 +191,6 @@ app.get('/api/recommendations', authenticateToken, (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-// ============= CLAUDE AI CHATBOT ENDPOINT =============
 
 app.post('/api/claude', authenticateToken, async (req, res) => {
   try {
@@ -253,9 +228,7 @@ app.post('/api/claude', authenticateToken, async (req, res) => {
   }
 });
 
-// ============= MIDDLEWARE =============
 
-// Authenticate JWT token
 function authenticateToken(req, res, next) {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; 
@@ -273,7 +246,6 @@ function authenticateToken(req, res, next) {
   });
 }
 
-// ============= START SERVER =============
 
 app.listen(PORT, () => {
   console.log(`🚀 COCO Backend running on http://localhost:${PORT}`);
@@ -284,11 +256,10 @@ app.listen(PORT, () => {
   console.log(`   GET  /api/onboarding`);
   console.log(`   GET  /api/user/profile`);
   console.log(`   GET  /api/recommendations`);
-  console.log(`   POST /api/claude`); // ADD THIS LINE
+  console.log(`   POST /api/claude`); 
   console.log(`   GET  /api/users`);
 });
 
-// get users
 app.get('/api/users', (req, res) => {
   res.json(users.map(u => ({
     id: u.id,

@@ -25,8 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _clearOldAdData() async {
-    // Clear the local ad data when app starts fresh
-    // This ensures the image only shows after posting in the current session
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('has_posted_ad');
     await prefs.remove('latest_ad_views');
@@ -44,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
           _isLoading = false;
         });
       }
-      // Still check for local ad data even if not authenticated
       await _loadLocalAdData();
       return;
     }
@@ -65,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = false;
       });
       
-      // If backend didn't return ad performance, check local storage
       if (_adPerformance == null) {
         await _loadLocalAdData();
       }
@@ -189,7 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
         borderRadius: BorderRadius.circular(15),
         child: Stack(
           children: [
-            // Background image (shows when ad performance exists)
             if (_adPerformance != null)
               Positioned.fill(
                 child: Image.network(
@@ -205,7 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             
-            // Stats overlay (shows when ad performance exists)
             if (_adPerformance != null)
               Container(
                 decoration: BoxDecoration(
@@ -255,7 +249,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               )
             else
-              // No data placeholder
               const Center(
                 child: Text(
                   'Upload something first',

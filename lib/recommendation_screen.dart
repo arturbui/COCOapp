@@ -7,13 +7,12 @@ import 'backend_service.dart';
 class RecommendationScreen extends StatelessWidget {
   const RecommendationScreen({super.key});
 
-  // Open Meta Business URL
   Future<void> _openMetaBusinessLink() async {
     final Uri url = Uri.parse('https://business.facebook.com/overview');
 
     if (!await launchUrl(
       url,
-      mode: LaunchMode.externalApplication, // opens in browser
+      mode: LaunchMode.externalApplication,
     )) {
       throw 'Could not launch $url';
     }
@@ -25,7 +24,7 @@ class RecommendationScreen extends StatelessWidget {
     final recommendations = provider.getRecommendations();
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F0F), // Match home screen
+      backgroundColor: const Color(0xFF0F0F0F), 
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -33,7 +32,6 @@ class RecommendationScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              // Title with green highlight
               RichText(
                 text: const TextSpan(
                   children: [
@@ -65,7 +63,6 @@ class RecommendationScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 40),
-              // Recommendation text
               Text(
                 'First things first, we need to setup your social media accounts. For your audience we\'d recommend ${_formatPlatformList(recommendations)}',
                 style: const TextStyle(
@@ -75,7 +72,6 @@ class RecommendationScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              // Platform cards
               Expanded(
                 child: ListView.builder(
                   itemCount: recommendations.length,
@@ -85,7 +81,6 @@ class RecommendationScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Meta Business Account Section
               const Text(
                 'To setup for Instagram/Facebook we have to create a Meta business account, this can be done by clicking on this link.',
                 style: TextStyle(
@@ -95,12 +90,11 @@ class RecommendationScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 24),
-              // Meta button
               SizedBox(
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: _openMetaBusinessLink, // <- opens Meta
+                  onPressed: _openMetaBusinessLink, 
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFC3ECCA),
                     foregroundColor: Colors.black,
@@ -131,7 +125,6 @@ class RecommendationScreen extends StatelessWidget {
                 style: TextStyle(color: Color(0xFF5C6E5F), fontSize: 14),
               ),
               const SizedBox(height: 24),
-              // Next button
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -139,7 +132,6 @@ class RecommendationScreen extends StatelessWidget {
                   onPressed: () async {
                     final backendService = BackendService();
 
-                    // Save onboarding data to backend
                     final saved = await backendService.saveOnboardingData({
                       'marketingChallenge': provider.data.marketingChallenge,
                       'socialMediaPresence': provider.data.socialMediaPresence,

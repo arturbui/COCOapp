@@ -6,11 +6,9 @@ class OnboardingData {
   String? businessType;
   String? successGoal;
 
-  // Recommendation logic
   List<String> getRecommendedPlatforms() {
     Set<String> recommendations = {};
 
-    // Based on target audience
     if (targetAudience == 'Local customers') {
       recommendations.addAll(['Facebook', 'Instagram']);
     } else if (targetAudience == 'Professionals / B2B') {
@@ -23,7 +21,6 @@ class OnboardingData {
       recommendations.addAll(['Instagram', 'YouTube']);
     }
 
-    // Based on business type
     if (businessType == 'Local business') {
       recommendations.addAll(['Facebook', 'Instagram']);
     } else if (businessType == 'Online store') {
@@ -36,7 +33,6 @@ class OnboardingData {
       recommendations.addAll(['LinkedIn', 'Twitter']);
     }
 
-    // If no strong recommendations, suggest the most popular ones
     if (recommendations.isEmpty) {
       recommendations.addAll(['Instagram', 'Facebook']);
     }

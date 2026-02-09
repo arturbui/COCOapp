@@ -83,7 +83,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 60),
-                // Welcome back text
                 const Text(
                   'Welcome back!',
                   style: TextStyle(
@@ -98,7 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(color: Color(0xFFC3ECCA), fontSize: 16),
                 ),
                 const SizedBox(height: 40),
-                // Email field
                 const Text(
                   'E-mail',
                   style: TextStyle(
@@ -157,7 +155,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Password field
                 const Text(
                   'Password',
                   style: TextStyle(
@@ -226,7 +223,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 40),
-                // Login button
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -262,7 +258,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Don't have account? Sign up
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -304,26 +299,21 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       try {
-        // 1. Await the login and the internal token saving process
         final result = await _backendService.login(
           _emailController.text.trim(),
           _passwordController.text,
         );
 
-        // 2. Safety check: make sure the screen is still there
         if (!mounted) return;
 
         setState(() => _isLoading = false);
 
         if (result != null) {
-          // SUCCESS: Use pushNamedAndRemoveUntil so they can't 'back' into the login screen
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         } else {
-          // FAILURE: Show user-friendly error
           _showErrorSnackBar('Login failed. Check your email and password.');
         }
       } catch (e) {
-        // Handle network errors or storage crashes
         if (mounted) {
           setState(() => _isLoading = false);
           _showErrorSnackBar(
@@ -334,7 +324,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // Helper for cleaner code
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(

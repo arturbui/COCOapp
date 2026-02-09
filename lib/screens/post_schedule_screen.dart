@@ -16,7 +16,6 @@ class PostScheduleScreen extends StatefulWidget {
 class _PostScheduleScreenState extends State<PostScheduleScreen> {
   int currentStep = 0;
   
-  // Hashtag settings
   String hashtagMode = 'Generate with AI';
   List<String> customHashtags = [];
   List<String> generatedHashtags = [
@@ -27,7 +26,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
     '#work'
   ];
   
-  // Platform selection
   List<String> selectedPlatforms = [];
   final List<String> availablePlatforms = [
     'Instagram',
@@ -44,7 +42,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Back button
             Padding(
               padding: const EdgeInsets.all(20),
               child: Row(
@@ -57,7 +54,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
               ),
             ),
             
-            // Video preview
             Expanded(
               flex: 3,
               child: Container(
@@ -76,7 +72,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
             
             const SizedBox(height: 20),
             
-            // Step content
             Expanded(
               flex: 2,
               child: currentStep == 0 ? _buildHashtagStep() : _buildPlatformStep(),
@@ -103,7 +98,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           ),
           const SizedBox(height: 16),
           
-          // Generate with AI button
           _buildHashtagButton(
             'Generate with AI',
             hashtagMode == 'Generate with AI',
@@ -116,7 +110,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           
           const SizedBox(height: 10),
           
-          // Custom button
           _buildHashtagButton(
             'Custom',
             hashtagMode == 'Custom',
@@ -130,11 +123,9 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           
           const Spacer(),
           
-          // Next button
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Platform button (grayed out)
               Text(
                 'Platform',
                 style: TextStyle(
@@ -144,7 +135,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
                 ),
               ),
               
-              // Hashtags checkbox
               Row(
                 children: [
                   const Text(
@@ -176,7 +166,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           
           const SizedBox(height: 12),
           
-          // Continue to next step
           GestureDetector(
             onTap: () {
               setState(() {
@@ -214,7 +203,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Platform dropdown
           GestureDetector(
             onTap: _showPlatformPicker,
             child: Container(
@@ -246,11 +234,9 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           
           const Spacer(),
           
-          // Bottom section
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              // Platform text
               const Text(
                 'Platform',
                 style: TextStyle(
@@ -260,7 +246,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
                 ),
               ),
               
-              // Hashtags checkbox
               Row(
                 children: [
                   const Text(
@@ -292,7 +277,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           
           const SizedBox(height: 12),
           
-          // Post button
           GestureDetector(
             onTap: _postVideo,
             child: Container(
@@ -437,7 +421,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
                   }
                 });
                 Navigator.pop(context);
-                // Reopen to show updated state
                 _showPlatformPicker();
               },
             );
@@ -457,7 +440,6 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
   }
 
   void _postVideo() async {
-    // Show posting dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -477,18 +459,15 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
       ),
     );
 
-    // Save mock ad data to SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('latest_ad_views', '1234');
     await prefs.setString('latest_ad_clicks', '87');
     await prefs.setString('latest_ad_ctr', '7.1');
     await prefs.setBool('has_posted_ad', true);
 
-    // Simulate posting delay
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.pop(context); // Close loading dialog
+      Navigator.pop(context);
       
-      // Show success message
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -517,9 +496,7 @@ class _PostScheduleScreenState extends State<PostScheduleScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                // Close success dialog
                 Navigator.pop(context);
-                // Navigate to home screen and trigger refresh to show the posted ad
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   '/home',

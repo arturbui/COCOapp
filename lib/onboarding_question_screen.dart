@@ -60,7 +60,7 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F0F), // Match home screen
+      backgroundColor: const Color(0xFF0F0F0F), 
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
@@ -68,23 +68,19 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              // Title with green highlight
               _buildTitle(),
               const SizedBox(height: 40),
-              // Question
               Text(
                 widget.question,
                 style: const TextStyle(
-                  color: Color(0xFFC3ECCA), // Match home screen text
+                  color: Color(0xFFC3ECCA), 
                   fontSize: 18,
                   fontWeight: FontWeight.w400,
                 ),
               ),
               const SizedBox(height: 24),
-              // Custom Dropdown
               _buildCustomDropdown(),
               const SizedBox(height: 24),
-              // Checkboxes (if applicable)
               if (widget.showCheckboxes && widget.checkboxOptions != null) ...[
                 const Text(
                   'If yes, which social media?',
@@ -98,7 +94,6 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
                 _buildCheckboxes(),
               ],
               const Spacer(),
-              // Next button
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -107,7 +102,7 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(
                       0xFF94FFA6,
-                    ), // Match home screen green
+                    ), 
                     foregroundColor: Colors.black,
                     disabledBackgroundColor: const Color(0xFF2A2A2A),
                     shape: RoundedRectangleBorder(
@@ -130,13 +125,11 @@ class _OnboardingQuestionScreenState extends State<OnboardingQuestionScreen> {
   }
 
   Widget _buildTitle() {
-    // Split title to highlight certain words in green
     final words = widget.title.split(' ');
     final List<TextSpan> spans = [];
 
     for (int i = 0; i < words.length; i++) {
       final word = words[i];
-      // Highlight specific words in green
       final isGreen =
           word.toLowerCase().contains('yourself') ||
           word.toLowerCase().contains('coco') ||

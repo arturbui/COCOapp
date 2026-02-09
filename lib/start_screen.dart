@@ -6,14 +6,13 @@ class StartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0F0F0F), // Match home screen
+      backgroundColor: const Color(0xFF0F0F0F), 
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -23,7 +22,7 @@ class StartScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: const Color(0xFF94FFA6), // Match home green
+                        color: const Color(0xFF94FFA6), 
                         width: 3,
                       ),
                     ),
@@ -67,7 +66,6 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              // Sign up button
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -90,7 +88,6 @@ class StartScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              // Log in button
               SizedBox(
                 width: double.infinity,
                 height: 56,

@@ -17,10 +17,8 @@ import 'screens/video_editor_screen.dart';
 import 'screens/dashboard_screen.dart';
 
 Future<void> main() async {
-  // Initialize Flutter bindings FIRST
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load environment variables for Claude API
   try {
     await dotenv.load(fileName: ".env");
     print('✓ API key loaded successfully');

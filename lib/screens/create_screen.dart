@@ -64,7 +64,6 @@ class CreateScreen extends StatelessWidget {
                           icon: Icons.camera_alt,
                           title: 'Take Photo or Video',
                           onTap: () {
-                            // Go directly to editor with dummy video path
                             _navigateToEditor(
                               context,
                               'dummy_video_path',
@@ -82,7 +81,6 @@ class CreateScreen extends StatelessWidget {
                           icon: Icons.photo_library,
                           title: 'Select from Gallery',
                           onTap: () {
-                            // Go directly to editor with dummy video path
                             _navigateToEditor(
                               context,
                               'dummy_gallery_path',

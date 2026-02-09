@@ -184,7 +184,6 @@ class BackendService {
     }
   }
 
-  // Get latest ad performance
   Future<Map<String, dynamic>?> getLatestAdPerformance() async {
     try {
       final token = await _getToken();
@@ -212,7 +211,6 @@ class BackendService {
     }
   }
 
-  // Get user's ads list
   Future<List<Map<String, dynamic>>?> getUserAds() async {
     try {
       final token = await _getToken();
@@ -241,7 +239,6 @@ class BackendService {
     }
   }
 
-  // Get news/updates
   Future<List<Map<String, dynamic>>?> getNews() async {
     try {
       final token = await _getToken();
@@ -270,7 +267,6 @@ class BackendService {
     }
   }
 
-  // Check if user is authenticated
   Future<bool> isAuthenticated() async {
     final token = await _getToken();
     return token != null;

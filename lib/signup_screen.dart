@@ -43,7 +43,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                // Logo
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -89,7 +88,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 const SizedBox(height: 60),
-                // Username field
                 const Text(
                   'Username',
                   style: TextStyle(
@@ -133,7 +131,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Email field
                 const Text(
                   'E-mail',
                   style: TextStyle(
@@ -181,7 +178,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Password field
                 const Text(
                   'Password',
                   style: TextStyle(
@@ -242,7 +238,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 const SizedBox(height: 24),
-                // Confirm Password field
                 const Text(
                   'Confirm Password',
                   style: TextStyle(
@@ -303,7 +298,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 const SizedBox(height: 40),
-                // Next button
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -315,27 +309,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               setState(() => _isLoading = true);
 
                               try {
-                                // 1. Trigger the signup and WAIT for the response
-                                // The BackendService should handle the 'await prefs.setString' internally
                                 final result = await _backendService.signUp(
                                   _usernameController.text.trim(),
                                   _emailController.text.trim(),
                                   _passwordController.text,
                                 );
 
-                                // 2. Check if the widget is still in the tree before proceeding
                                 if (!mounted) return;
 
                                 setState(() => _isLoading = false);
 
                                 if (result != null) {
-                                  // SUCCESS: Token is saved, move to onboarding
                                   Navigator.pushNamed(
                                     context,
                                     '/onboarding/question1',
                                   );
                                 } else {
-                                  // FAILURE: Show error
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
@@ -346,7 +335,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   );
                                 }
                               } catch (e) {
-                                // Handle unexpected network or storage errors
                                 if (mounted) {
                                   setState(() => _isLoading = false);
                                   ScaffoldMessenger.of(context).showSnackBar(

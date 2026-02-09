@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'onboarding_question_screen.dart';
 import 'onboarding_provider.dart';
 
-// Question 1: What feels hardest about marketing today?
 class Question1Screen extends StatelessWidget {
   const Question1Screen({super.key});
 
@@ -31,7 +30,6 @@ class Question1Screen extends StatelessWidget {
   }
 }
 
-// Question 2: How established is your social media presence
 class Question2Screen extends StatelessWidget {
   const Question2Screen({super.key});
 
@@ -70,7 +68,6 @@ class Question2Screen extends StatelessWidget {
   }
 }
 
-// Question 3: Who are you trying to reach?
 class Question3Screen extends StatelessWidget {
   const Question3Screen({super.key});
 
@@ -98,7 +95,6 @@ class Question3Screen extends StatelessWidget {
   }
 }
 
-// Question 4: Where are you starting from?
 class Question4Screen extends StatelessWidget {
   const Question4Screen({super.key});
 
@@ -126,7 +122,6 @@ class Question4Screen extends StatelessWidget {
   }
 }
 
-// Question 5: What would success look like in the next 3 months
 class Question5Screen extends StatelessWidget {
   const Question5Screen({super.key});
 
