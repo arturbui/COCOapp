@@ -20,6 +20,6 @@ The Flutter app switches API base URLs depending on the runtime environment. Exa
   // Physical Android device
   static const String _baseUrl = 'http://192.168.0.100:3000/api/auth';
 }  </pre>
-##Contributors
--Artur Buivydis (https://github.com/arturbui)
--Mantas Grusauskas (https://github.com/MantasGrusa)
+## Contributors
+- Artur Buivydis (https://github.com/arturbui)
+- Mantas Grusauskas (https://github.com/MantasGrusa)
