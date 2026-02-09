@@ -2,10 +2,20 @@
 ## Project Description
 This is a university project developed by **Artur Buivydis** and **Mantas Grusauskas**. The project focuses on building a symplified posting system that assists self employed users and small to medium sized enterprises in managing their social media content and marketing strategies. This achieved through the use of an AI chatbot and an extensive onboarding that provides the app with necessary data to provide the best advice to the user.
 
+This repository contains both the Flutter mobile application and the Node.js backend used during development.
 
 ## Tools and Technologies
 ### Frontend
-
+- Flutter
+- Dart
+- Android Studio
+### Backend
+- Node.js
+- Express.js
+- Claude AI API
+## Cloning the Repository
+To clone the project repository locally, run the following command:
+`git clone `
 ## Api base URL configuration
 
 The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
