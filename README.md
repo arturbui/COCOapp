@@ -15,7 +15,7 @@ This repository contains both the Flutter mobile application and the Node.js bac
 - Claude AI API
 ## Cloning the Repository
 To clone the project repository locally, run the following command:
-`git clone `
+<pre> ```git clone https://github.com/arturbui/COCOapp.git``` </pre>
 ## Api base URL configuration
 
 The Flutter app switches API base URLs depending on the runtime environment. Example from AuthService:
